@@ -21,13 +21,16 @@ public class Usuario extends Base{
     private String auth0Id;
     @Column(name = "user_name")
     private String userName;
-    protected String nombre;
-    protected String apellido;
+    private String nombre;
+    private String apellido;
     protected String email;
     protected Number dni;
     @OneToOne
     @JoinColumn(name="imagen_id")
     protected Imagen imagenUser;
+
+    @Column(name = "password")
+    private String password;  // Almacena la contraseña encriptada
 
 
 }

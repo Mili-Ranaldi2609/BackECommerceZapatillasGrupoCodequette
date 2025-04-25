@@ -15,7 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Admin extends Usuario{
+public class Admin extends Usuario {
 
     @Column(name = "rol")
-    private Rol rol;}
+    private Rol rol;
+    @Column(name = "activo")
+    private Boolean activo;
+}
+
