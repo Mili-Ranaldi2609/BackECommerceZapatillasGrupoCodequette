@@ -2,19 +2,21 @@ package com.example.ecommercezapatillas.entities;
 
 import com.example.ecommercezapatillas.entities.enums.Rol;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "admin")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
+@DiscriminatorValue("admin")
 public class Admin extends Usuario {
 
     @Column(name = "rol")

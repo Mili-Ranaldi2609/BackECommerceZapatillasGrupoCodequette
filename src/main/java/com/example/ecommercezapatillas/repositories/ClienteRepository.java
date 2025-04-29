@@ -5,6 +5,6 @@
 
     @Repository
     public interface ClienteRepository extends BaseRepository<Cliente, Long> {
-        Cliente findAllByUsuarioId(Long idUsuario);
-        Cliente findAllByImagenPersonaId(Long idImagen);
+        // Método para buscar cliente por ID de imagen (en este caso, el ID de imagen está en la entidad 'Imagen')
+        Cliente findByImagenUser_Id(Long idImagen);  // Acceder al ID de la imagen relacionada
     }

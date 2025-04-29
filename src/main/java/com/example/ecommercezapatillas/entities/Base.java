@@ -19,6 +19,7 @@ import java.io.Serializable;
 @SuperBuilder
 public abstract class Base implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Cambiado a IDENTITY
     protected Long id;
 }
+

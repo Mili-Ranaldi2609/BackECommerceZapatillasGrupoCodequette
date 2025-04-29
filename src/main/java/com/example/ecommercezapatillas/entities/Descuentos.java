@@ -1,8 +1,6 @@
 package com.example.ecommercezapatillas.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name="descuentos")
 @Getter
@@ -33,4 +34,7 @@ public class Descuentos extends Base{
     private String descripcionDescuento;
     @Column(name="precio_promocional")
     private Double precioPromocional;
+    @ManyToMany
+    @JoinTable(name = "producto_descuentosid",joinColumns = @JoinColumn(name = "descuentoId"),inverseJoinColumns = @JoinColumn(name="productoId"))
+    private Set<Producto> productos=new HashSet<>();
 }

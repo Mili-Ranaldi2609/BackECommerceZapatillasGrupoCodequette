@@ -3,7 +3,6 @@ package com.example.ecommercezapatillas.services;
 import com.example.ecommercezapatillas.entities.OrdenCompra;
 import com.example.ecommercezapatillas.entities.OrdenCompraDetalle;
 import com.example.ecommercezapatillas.repositories.OrdenCompraRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

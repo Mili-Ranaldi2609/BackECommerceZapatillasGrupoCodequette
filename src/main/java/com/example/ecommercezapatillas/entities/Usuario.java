@@ -1,11 +1,13 @@
 package com.example.ecommercezapatillas.entities;
 
 import com.example.ecommercezapatillas.entities.enums.Rol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_usuario")
 public class Usuario extends Base{
     @Column(name = "auth_id")
     private String auth0Id;
@@ -30,6 +34,7 @@ public class Usuario extends Base{
     protected Imagen imagenUser;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;  // Almacena la contraseña encriptada
 
 

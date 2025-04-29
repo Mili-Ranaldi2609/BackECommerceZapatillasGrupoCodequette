@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
 @Table(name="categorias")
 @Getter
@@ -23,6 +24,9 @@ public class Categoria extends Base{
     @ManyToOne
     @JoinColumn(name="categoriaPadreID")
     private Categoria categoriaPadre;
-
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
 }
+

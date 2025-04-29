@@ -2,10 +2,9 @@ package com.example.ecommercezapatillas.services;
 
 import com.example.ecommercezapatillas.entities.OrdenCompraDetalle;
 import com.example.ecommercezapatillas.repositories.OrdenCompraDetalleRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
 
 @Service
 public class OrdenCompraDetalleService extends BaseService<OrdenCompraDetalle, Long> {

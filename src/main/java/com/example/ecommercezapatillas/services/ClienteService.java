@@ -20,18 +20,24 @@ public class ClienteService extends BaseService<Cliente, Long> {
     }
 
     // Método para buscar un cliente por su usuario ID
-    public Cliente findAllByUsuarioId(Long idUsuario) throws Exception {
+    public Cliente findByUsuarioId(Long idUsuario) throws Exception {
         try {
-            return clienteRepository.findAllByUsuarioId(idUsuario);
+            Optional<Cliente> clienteOptional = clienteRepository.findById(idUsuario);
+            if (clienteOptional.isPresent()) {
+                return clienteOptional.get();  // Retorna el cliente si lo encuentra
+            } else {
+                throw new Exception("Cliente no encontrado");
+            }
         } catch (Exception e) {
             throw new Exception("Error al buscar cliente por ID de usuario: " + e.getMessage());
         }
     }
 
     // Método para buscar un cliente por imagen asociada
-    public Cliente findAllByImagenPersonaId(Long idImagen) throws Exception {
+    public Cliente findByImagenPersonaId(Long idImagen) throws Exception {
         try {
-            return clienteRepository.findAllByImagenPersonaId(idImagen);
+            // Ajustamos el nombre del método que se llama al repositorio
+            return clienteRepository.findByImagenUser_Id(idImagen);  // Usa el método de repositorio actualizado
         } catch (Exception e) {
             throw new Exception("Error al buscar cliente por ID de imagen: " + e.getMessage());
         }
@@ -64,12 +70,11 @@ public class ClienteService extends BaseService<Cliente, Long> {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-
     }
 
     @Override
     public Cliente actualizar(Cliente cliente) throws Exception {
-        try{
+        try {
             // Verificar que el cliente exista
             Optional<Cliente> clienteExistente = clienteRepository.findById(cliente.getId());
             if (!clienteExistente.isPresent()) {
@@ -98,13 +103,14 @@ public class ClienteService extends BaseService<Cliente, Long> {
 
             // Actualizar el cliente
             return super.actualizar(cliente);
-        }catch (Exception e){throw new Exception(e.getMessage());}
-
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
     public void eliminar(Long id) throws Exception {
-        try{
+        try {
             // Verificar que el cliente exista antes de eliminar
             Optional<Cliente> clienteExistente = clienteRepository.findById(id);
             if (!clienteExistente.isPresent()) {
@@ -113,15 +119,17 @@ public class ClienteService extends BaseService<Cliente, Long> {
 
             // Eliminar el cliente
             super.eliminar(id);
-        }catch (Exception e){throw new Exception(e.getMessage());}
-
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     private boolean isValidEmail(String email) throws Exception {
-        try{
+        try {
             String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
             return email.matches(emailRegex);
-        }catch (Exception e){throw new Exception(e.getMessage());}
-
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 }
