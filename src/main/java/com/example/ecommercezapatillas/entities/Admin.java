@@ -19,8 +19,7 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue("admin")
 public class Admin extends Usuario {
 
-    @Column(name = "rol")
-    private Rol rol;
+
     @Column(name = "activo")
     private Boolean activo;
 }

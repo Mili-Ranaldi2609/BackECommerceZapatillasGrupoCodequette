@@ -26,14 +26,22 @@ public class Producto extends Base{
     protected Sexo sexo;
     @Column(name = "tiene_promocion")
     private boolean tienePromocion;
-    @ManyToOne
-    @JoinColumn(name="categoriaId")
-    protected Categoria categoria;
+    @ManyToMany
+    @JoinTable(
+            name = "producto_categoria",
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private Set<Categoria> categorias = new HashSet<>();
+
     @OneToMany
-    @JoinColumn(name = "imagenesArticuloId")
+    @JoinColumn(name = "imagenesProductoId")
     protected Set<Imagen> imagenes=new HashSet<>();
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductoDetalle> productos_detalles = new HashSet<>();
+    @ManyToMany(mappedBy = "productos")
+    private Set<Descuentos> descuentos = new HashSet<>();
+
 
 }
 

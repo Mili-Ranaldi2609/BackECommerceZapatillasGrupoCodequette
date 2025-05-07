@@ -1,6 +1,10 @@
 package com.example.ecommercezapatillas.entities.enums;
 
 public enum Talle {
+    L,
+    M,
+    S,
+    XL,
     TALLE_25,
     TALLE_26,
     TALLE_27,

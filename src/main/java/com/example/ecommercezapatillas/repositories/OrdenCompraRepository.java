@@ -10,7 +10,4 @@ import java.util.List;
 public interface OrdenCompraRepository extends BaseRepository<OrdenCompra, Long> {
     //todas las ordenes con una fecha específica
     List<OrdenCompra> findAllByFechaCompra(LocalDateTime fecha);
-
-    // todas las ordenes que usaron un descuento específico
-    List<OrdenCompra> findAllByDescuentoId(Long idDescuento);
 }

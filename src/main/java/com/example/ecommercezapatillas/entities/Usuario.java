@@ -4,7 +4,6 @@ import com.example.ecommercezapatillas.entities.enums.Rol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -28,7 +27,11 @@ public class Usuario extends Base{
     private String nombre;
     private String apellido;
     protected String email;
-    protected Number dni;
+    private Integer dni;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol")
+    private Rol rol;
+
     @OneToOne
     @JoinColumn(name="imagen_id")
     protected Imagen imagenUser;

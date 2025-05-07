@@ -1,6 +1,8 @@
 package com.example.ecommercezapatillas.controllers;
 
+import com.example.ecommercezapatillas.dto.CategoriaMenuDTO;
 import com.example.ecommercezapatillas.entities.Categoria;
+import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,31 +22,19 @@ public class CategoriaController extends BaseController<Categoria, Long> {
         super(categoriaService);
         this.categoriaService = categoriaService;
     }
-
-    // Agregar subcategoría a una categoría padre
-    @PostMapping("/{idCategoriaPadre}/subcategoria")
-    public ResponseEntity<Categoria> agregarSubcategoria(@PathVariable Long idCategoriaPadre, @RequestBody Categoria nuevaSubcategoria) {
-        try {
-            Categoria subcategoriaCreada = categoriaService.agregarSubcategoria(idCategoriaPadre, nuevaSubcategoria);
-            if (subcategoriaCreada != null) {
-                return ResponseEntity.status(201).body(subcategoriaCreada);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(400).body(null);
-        }
+    // 🔹 Obtener todas las categorías raíz (sin padre)
+    @GetMapping("/raiz")
+    public ResponseEntity<List<Categoria>> listarCategoriasRaiz() {
+        List<Categoria> categoriasRaiz = categoriaService.listarCategoriasRaiz();
+        return ResponseEntity.ok(categoriasRaiz);
     }
 
-    // Listar subcategorías de una categoría padre
-    @GetMapping("/{idCategoriaPadre}/subcategorias")
-    public ResponseEntity<List<Categoria>> listarSubcategorias(@PathVariable Long idCategoriaPadre) {
-        try {
-            List<Categoria> subcategorias = categoriaService.listarPorCategoriaPadre(idCategoriaPadre);
-            return ResponseEntity.ok(subcategorias);
-        } catch (Exception e) {
-            return ResponseEntity.status(400).body(null);
-        }
+    // 🔹 Obtener subcategorías de una categoría padre
+    @GetMapping("/{idPadre}/subcategorias")
+    public ResponseEntity<List<Categoria>> listarSubcategorias(@PathVariable Long idPadre) {
+        List<Categoria> subcategorias = categoriaService.listarSubcategorias(idPadre);
+        return ResponseEntity.ok(subcategorias);
     }
+
 }
 

@@ -19,8 +19,6 @@ import java.util.List;
 @DiscriminatorValue("clientes")
 public class Cliente extends Usuario{
 
-    @Column(name = "rol")
-    private Rol rol;
     @ManyToMany(mappedBy = "clientes")
     private List<Direccion> direcciones= new ArrayList<>();
 }

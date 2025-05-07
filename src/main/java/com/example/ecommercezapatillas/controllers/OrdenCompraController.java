@@ -27,8 +27,4 @@ public class OrdenCompraController extends BaseController<OrdenCompra, Long> {
         return ordenCompraService.obtenerPorFecha(fechaCompra);
     }
 
-    @GetMapping("/descuento/{idDescuento}")
-    public List<OrdenCompra> obtenerPorDescuento(@PathVariable Long idDescuento) throws Exception {
-        return ordenCompraService.obtenerPorDescuento(idDescuento);
-    }
 }
