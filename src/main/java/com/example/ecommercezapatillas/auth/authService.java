@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import com.example.ecommercezapatillas.services.JwtService;
 import com.example.ecommercezapatillas.entities.User;
 import com.example.ecommercezapatillas.entities.enums.Rol;
-import com.example.ecommercezapatillas.repositories.UsuarioRepository;
+import com.example.ecommercezapatillas.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class authService {
+public class AuthService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -26,7 +26,7 @@ public class authService {
                         request.getPassword()
                 )
         );
-        User user = usuarioRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         String token = jwtService.getToken(user);
@@ -44,7 +44,7 @@ public class authService {
         .country(request.getCountry())
         .role(Rol.USER)
         .build();
-        usuarioRepository.save(user);
+        userRepository.save(user);
         return AuthResponse.builder()
         .token(jwtService.getToken(user))
         .build();

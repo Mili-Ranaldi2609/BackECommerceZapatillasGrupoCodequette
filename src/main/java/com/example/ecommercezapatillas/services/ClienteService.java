@@ -56,7 +56,7 @@ public class ClienteService extends BaseService<Cliente, Long> {
             }
 
             // Validación de rol
-            if (cliente.getRol() == null || cliente.getRol() != Rol.CLIENTE) {
+            if (cliente.getRol() == null || cliente.getRol() != Rol.USER) {
                 throw new Exception("El rol del cliente no es válido.");
             }
 
@@ -92,7 +92,7 @@ public class ClienteService extends BaseService<Cliente, Long> {
             }
 
             // Validación de rol
-            if (cliente.getRol() == null || cliente.getRol() != Rol.CLIENTE) {
+            if (cliente.getRol() == null || cliente.getRol() != Rol.USER) {
                 throw new Exception("El rol del cliente no es válido.");
             }
 
