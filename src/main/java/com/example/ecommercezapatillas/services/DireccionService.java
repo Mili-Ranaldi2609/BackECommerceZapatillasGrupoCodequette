@@ -24,13 +24,6 @@ public class DireccionService extends BaseService<Direccion, Long> {
             throw new Exception(e.getMessage());
         }
     }
-    @Transactional
-    public List<Direccion> listarPorClientesID(Long idCliente)throws Exception{
-        try{
-            return direccionRepository.findAllByClientesAndId(idCliente);
-        }catch(Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
+
 
 }

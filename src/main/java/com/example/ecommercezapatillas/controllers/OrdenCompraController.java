@@ -20,11 +20,6 @@ public class OrdenCompraController extends BaseController<OrdenCompra, Long> {
         this.ordenCompraService = ordenCompraService;
     }
 
-    @GetMapping("/fecha")
-    public List<OrdenCompra> obtenerPorFecha(@RequestParam("fecha") String fecha) throws Exception {
-        // Se recibe la fecha como String y se convierte a LocalDateTime
-        LocalDateTime fechaCompra = LocalDateTime.parse(fecha);
-        return ordenCompraService.obtenerPorFecha(fechaCompra);
-    }
+
 
 }

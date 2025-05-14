@@ -15,25 +15,6 @@ public class DescuentosService extends BaseService<Descuentos, Long> {
         this.descuentosRepository = descuentosRepository;
     }
 
-    @Override
-    public Descuentos crear(Descuentos descuento) throws Exception {
-        validarDescuento(descuento); // Validación antes de crear
-        try {
-            return super.crear(descuento); // Uso del método base para crear
-        } catch (Exception e) {
-            throw new Exception("Error al crear el descuento: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public Descuentos actualizar(Descuentos descuento) throws Exception {
-        validarDescuento(descuento); // Validación antes de actualizar
-        try {
-            return super.actualizar(descuento); // Uso del método base para actualizar
-        } catch (Exception e) {
-            throw new Exception("Error al actualizar el descuento: " + e.getMessage());
-        }
-    }
 
     // Método para obtener descuento por ID
     public Optional<Descuentos> obtenerPorIdDescuento(Long idDescuento) throws Exception {
@@ -46,33 +27,4 @@ public class DescuentosService extends BaseService<Descuentos, Long> {
     }
 
 
-    // Método de validación de descuento
-    private void validarDescuento(Descuentos descuento) throws Exception {
-        try {
-            // Validación de fechas
-            if (descuento.getFechaDesde() == null || descuento.getFechaHasta() == null ||
-                    descuento.getFechaDesde().isAfter(descuento.getFechaHasta())) {
-                throw new Exception("Las fechas del descuento son inválidas.");
-            }
-
-            // Validación de horas
-            if (descuento.getHoraDesde() == null || descuento.getHoraHasta() == null ||
-                    !descuento.getHoraDesde().isBefore(descuento.getHoraHasta())) {
-                throw new Exception("Las horas del descuento son inválidas.");
-            }
-
-            // Validación de precio promocional
-            if (descuento.getPrecioPromocional() == null || descuento.getPrecioPromocional() <= 0) {
-                throw new Exception("El precio promocional debe ser mayor a 0.");
-            }
-
-            // Validación de denominación
-            if (descuento.getDenominacion() == null || descuento.getDenominacion().isEmpty()) {
-                throw new Exception("La denominación no puede estar vacía.");
-            }
-
-        } catch (Exception e) {
-            throw new Exception("Error al validar el descuento: " + e.getMessage());
-        }
-    }
 }

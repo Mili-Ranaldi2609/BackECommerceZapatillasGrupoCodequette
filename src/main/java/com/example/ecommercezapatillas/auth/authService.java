@@ -11,9 +11,11 @@ import com.example.ecommercezapatillas.entities.enums.Rol;
 import com.example.ecommercezapatillas.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class authService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -41,8 +43,9 @@ public class AuthService {
         .password(request.getPassword())
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
-        .country(request.getCountry())
-        .role(Rol.USER)
+
+                .direcciones(new HashSet<>()) // si no las cargás desde el form
+                .role(Rol.USER)
         .build();
         userRepository.save(user);
         return AuthResponse.builder()

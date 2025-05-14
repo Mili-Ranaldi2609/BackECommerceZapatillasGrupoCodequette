@@ -17,15 +17,14 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 public class Producto extends Base{
-    @Column(name = "denominacion")
-    protected String denominacion;
-    @Column(name = "precio_venta")
-    protected Double precioVenta;
+
+    @Column(length = 1000)
+    private String descripcion;
     @Enumerated(EnumType.STRING)
     @Column(name = "sexo_producto")
     protected Sexo sexo;
-    @Column(name = "tiene_promocion")
-    private boolean tienePromocion;
+    @Column(name = "tipo_producto")
+    protected String tipoProducto;
     @ManyToMany
     @JoinTable(
             name = "producto_categoria",
@@ -33,14 +32,8 @@ public class Producto extends Base{
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private Set<Categoria> categorias = new HashSet<>();
-
-    @OneToMany
-    @JoinColumn(name = "imagenesProductoId")
-    protected Set<Imagen> imagenes=new HashSet<>();
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductoDetalle> productos_detalles = new HashSet<>();
-    @ManyToMany(mappedBy = "productos")
-    private Set<Descuentos> descuentos = new HashSet<>();
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private Set<Detalle> detalles = new HashSet<>();
 
 
 }

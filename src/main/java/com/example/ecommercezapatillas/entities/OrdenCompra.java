@@ -16,12 +16,14 @@ import java.util.Set;
 @Builder
 public class OrdenCompra extends Base {
     @Column(name = "total")
-    private Double total;
+    private Float total;
     @Column(name = "fecha_compra")
     private LocalDateTime fechaCompra;
-    @Column(name = "direccion_envio")
-    private String direccionEnvio;
-
-    @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name="id_usuario_direccion")
+    private Direccion direccion;
+    @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL)
     private Set<OrdenCompraDetalle> detalles = new HashSet<>();
+
+
 }

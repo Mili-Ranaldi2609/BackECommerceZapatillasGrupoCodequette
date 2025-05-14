@@ -1,7 +1,6 @@
 package com.example.ecommercezapatillas.services;
 
 import com.example.ecommercezapatillas.entities.OrdenCompra;
-import com.example.ecommercezapatillas.entities.OrdenCompraDetalle;
 import com.example.ecommercezapatillas.repositories.OrdenCompraRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,40 +17,4 @@ public class OrdenCompraService extends BaseService<OrdenCompra, Long> {
         this.ordenCompraRepository = ordenCompraRepository;
     }
 
-    @Override
-    public OrdenCompra crear(OrdenCompra ordenCompra) throws Exception {
-        try{
-            if (ordenCompra.getFechaCompra() == null) {
-                ordenCompra.setFechaCompra(LocalDateTime.now());
-            }
-
-            if (ordenCompra.getDetalles() == null || ordenCompra.getDetalles().isEmpty()) {
-                throw new Exception("La orden debe tener al menos un producto.");
-            }
-
-            double totalCalculado = ordenCompra.getDetalles().stream()
-                    .mapToDouble(det -> det.getProductoDetalle().getPrecioCompra() * det.getCantidad())
-                    .sum();
-
-            ordenCompra.setTotal(totalCalculado);
-
-            // Asignar referencia de orden a cada detalle (importante si usás persistencia en cascada)
-            for (OrdenCompraDetalle detalle : ordenCompra.getDetalles()) {
-                detalle.setOrdenCompra(ordenCompra);
-            }
-
-            return super.crear(ordenCompra);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-
-    }
-
-    public List<OrdenCompra> obtenerPorFecha(LocalDateTime fecha) throws Exception {
-        try{
-            return ordenCompraRepository.findAllByFechaCompra(fecha);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
 }

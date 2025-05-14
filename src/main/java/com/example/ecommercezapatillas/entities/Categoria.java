@@ -16,8 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 public class Categoria extends Base{
-    @Column(name="denominacion")
-    private String denominacion;
+    @Column(length = 500)
+    private String descripcion;
 
     @ManyToOne
     @JoinColumn(name = "categoria_padre_id")

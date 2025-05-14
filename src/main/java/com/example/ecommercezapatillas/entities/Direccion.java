@@ -26,7 +26,6 @@ public class Direccion extends Base{
     @ManyToOne
     @JoinColumn(name="localidad_id")
     private Localidad localidad;
-    @ManyToMany
-    @JoinTable(name = "direccion_clienteId",joinColumns = @JoinColumn(name = "direccionId"),inverseJoinColumns = @JoinColumn(name="clienteId"))
-    private Set<Cliente> clientes=new HashSet<>();
+    @ManyToMany(mappedBy = "direcciones")
+    private Set<User> users = new HashSet<>();
 }

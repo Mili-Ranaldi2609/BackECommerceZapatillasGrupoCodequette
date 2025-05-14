@@ -40,11 +40,11 @@ public class CategoriaService extends BaseService<Categoria, Long> {
         for (Categoria padre : categoriasPadre) {
             List<SubcategoriaDTO> subcategoriasConSexo = padre.getSubcategorias().stream()
                     .filter(sub -> sub.getProductos().stream().anyMatch(p -> p.getSexo() == sexo))
-                    .map(sub -> new SubcategoriaDTO(sub.getId(), sub.getDenominacion()))
+                    .map(sub -> new SubcategoriaDTO(sub.getId(), sub.getDescripcion()))
                     .collect(Collectors.toList());
 
             if (!subcategoriasConSexo.isEmpty()) {
-                resultado.add(new CategoriaMenuDTO(padre.getDenominacion(), subcategoriasConSexo));
+                resultado.add(new CategoriaMenuDTO(padre.getDescripcion(), subcategoriasConSexo));
             }
         }
 

@@ -21,14 +21,4 @@ public class OrdenCompraDetalleController extends BaseController<OrdenCompraDeta
         super(ordenCompraDetalleService);
         this.ordenCompraDetalleService = ordenCompraDetalleService;
     }
-
-    @GetMapping("/ordenCompra/{idOrdenCompra}")
-    public List<OrdenCompraDetalle> obtenerPorOrdenCompra(@PathVariable Long idOrdenCompra) throws Exception {
-        return ordenCompraDetalleService.obtenerPorOrdenCompra(idOrdenCompra);
-    }
-
-    @GetMapping("/productoDetalle/{idProductoDetalle}")
-    public List<OrdenCompraDetalle> obtenerPorProductoDetalle(@PathVariable Long idProductoDetalle) throws Exception {
-        return ordenCompraDetalleService.obtenerPorProductoDetalle(idProductoDetalle);
-    }
 }

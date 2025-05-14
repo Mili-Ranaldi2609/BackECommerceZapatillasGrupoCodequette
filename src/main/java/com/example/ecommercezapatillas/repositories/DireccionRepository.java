@@ -9,8 +9,5 @@ import java.util.List;
 public interface DireccionRepository extends BaseRepository<Direccion,Long> {
     List<Direccion> findAllByLocalidadId(Long idLocalidad);
 
-    default List<Direccion> findAllByClientesAndId(Long idCliente) {
-        return null;
-    }
 
 }

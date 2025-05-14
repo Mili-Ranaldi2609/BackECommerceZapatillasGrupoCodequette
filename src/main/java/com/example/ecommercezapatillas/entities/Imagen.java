@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "imagen")
 @Data
@@ -16,9 +18,9 @@ public class Imagen extends Base{
 
     @Column(name = "denominacion")
     private String denominacion;
-    @ManyToOne
-    @JoinColumn(name = "producto_id")
-    private Producto producto;
+    @ManyToMany(mappedBy = "imagenes")
+    private List<Detalle> detalles;
+
 
 
 }

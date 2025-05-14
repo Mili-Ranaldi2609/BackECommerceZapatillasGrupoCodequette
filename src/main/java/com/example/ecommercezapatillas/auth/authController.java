@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
-public class AuthController {
-    private final AuthService authService;
+public class authController {
+    private final authService authService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {

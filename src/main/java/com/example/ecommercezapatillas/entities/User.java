@@ -13,7 +13,9 @@ import com.example.ecommercezapatillas.entities.enums.Rol;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -33,13 +35,14 @@ public class User implements UserDetails {
 
     private String lastname;
 
-    private String country;
 
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Rol role;
-
+    @ManyToMany
+    @JoinTable(name = "usuario_direccion",joinColumns = @JoinColumn(name = "usuarioId"),inverseJoinColumns = @JoinColumn(name="direccionId"))
+    private Set<Direccion> direcciones=new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

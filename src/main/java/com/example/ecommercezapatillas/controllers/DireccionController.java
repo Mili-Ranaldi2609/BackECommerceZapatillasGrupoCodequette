@@ -35,14 +35,4 @@ public class DireccionController extends BaseController<Direccion, Long> {
         }
     }
 
-    // Listar direcciones por ID de cliente
-    @GetMapping("/cliente/{idCliente}")
-    public ResponseEntity<List<Direccion>> listarPorClientesID(@PathVariable Long idCliente) {
-        try {
-            List<Direccion> direcciones = direccionService.listarPorClientesID(idCliente);
-            return ResponseEntity.ok(direcciones);
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body(null);
-        }
-    }
 }

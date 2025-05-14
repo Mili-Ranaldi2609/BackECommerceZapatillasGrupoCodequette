@@ -3,31 +3,27 @@ package com.example.ecommercezapatillas.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Table(name = "orden_compra_detalle")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-
 public class OrdenCompraDetalle extends Base {
+
+    @Column(nullable = false)
+    private Integer cantidad;
+
+    @Column(nullable = false)
+    private Double subtotal;
+
+    // 🔗 Relación con OrdenCompra (muchos detalles por orden)
     @ManyToOne
     @JoinColumn(name = "orden_compra_id")
     private OrdenCompra ordenCompra;
 
+    // 🔗 Relación con Detalle (producto específico)
     @ManyToOne
-    @JoinColumn(name = "productodetalle_id")
-    private ProductoDetalle productoDetalle;
-
-    @Column(name = "cantidad")
-    private Integer cantidad;
-    @Column(name = "subtotal")
-    private Double subtotal;
-
-    public Double calcularSubtotal() {
-        return this.productoDetalle.getPrecioCompra() * this.cantidad;
-    }
+    @JoinColumn(name = "detalle_id")
+    private Detalle detalle;
 }
-

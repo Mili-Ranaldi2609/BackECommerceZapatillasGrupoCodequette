@@ -1,40 +1,34 @@
 package com.example.ecommercezapatillas.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name="descuentos")
-@Getter
-@Setter
+@Table(name = "descuentos")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-public class Descuentos extends Base{
-    @Column(name="denominacion")
-    private String denominacion;
-    @Column(name="fecha_desde")
-    private LocalDate fechaDesde;
-    @Column(name="fecha_hasta")
-    private LocalDate fechaHasta;
-    @Column(name="hora_desde")
-    private LocalTime horaDesde;
-    @Column(name="hora_hasta")
-    private LocalTime horaHasta;
-    @Column(name="descripcion_descuento")
-    private String descripcionDescuento;
-    @Column(name="precio_promocional")
-    private Double precioPromocional;
+@Builder
+public class Descuentos extends Base {
+
+    @Column(name = "porcentaje", nullable = false)
+    private Double porcentaje;
+
+    @Column(name = "fecha_inicio", nullable = false)
+    private LocalDateTime fechaInicio;
+
+    @Column(name = "fecha_final", nullable = false)
+    private LocalDateTime fechaFinal;
+
+    //Relación N:M con Precio a través de tabla intermedia
     @ManyToMany
-    @JoinTable(name = "producto_descuentosid",joinColumns = @JoinColumn(name = "descuentoId"),inverseJoinColumns = @JoinColumn(name="productoId"))
-    private Set<Producto> productos=new HashSet<>();
+    @JoinTable(
+            name = "precio_descuento",
+            joinColumns = @JoinColumn(name = "descuento_id"),
+            inverseJoinColumns = @JoinColumn(name = "precio_id")
+    )
+    private List<Precio> precios;
 }
