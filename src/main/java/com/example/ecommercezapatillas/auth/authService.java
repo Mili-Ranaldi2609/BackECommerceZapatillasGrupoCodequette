@@ -1,15 +1,16 @@
 package com.example.ecommercezapatillas.auth;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
-import com.example.ecommercezapatillas.services.JwtService;
 import com.example.ecommercezapatillas.entities.User;
 import com.example.ecommercezapatillas.entities.enums.Rol;
 import com.example.ecommercezapatillas.repositories.UserRepository;
+import com.example.ecommercezapatillas.services.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 
@@ -19,6 +20,7 @@ public class authService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request){
@@ -28,17 +30,17 @@ public class authService {
                         request.getPassword()
                 )
         );
-        User user = userRepository.findByUsername(request.getUsername())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        String token = jwtService.getToken(user);
+        var jwtToken = jwtService.getToken(user);
 
         return AuthResponse.builder()
-                .token(token)
+                .token(jwtToken)
                 .build();
     }
     public AuthResponse register(RegisterRequest request){
-        User user=User.builder()
+        var user= User.builder()
         .username(request.getUsername())
         .password(request.getPassword())
         .firstname(request.getFirstname())
@@ -48,8 +50,10 @@ public class authService {
                 .role(Rol.USER)
         .build();
         userRepository.save(user);
+        // 5. Generar el token JWT
+        var jwtToken = jwtService.getToken(user);
         return AuthResponse.builder()
-        .token(jwtService.getToken(user))
+        .token(jwtToken)
         .build();
     }
 }
