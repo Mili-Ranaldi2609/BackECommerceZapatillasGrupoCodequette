@@ -42,8 +42,9 @@ public class authService {
     public AuthResponse register(RegisterRequest request){
         var user= User.builder()
         .username(request.getUsername())
-        .password(request.getPassword())
-        .firstname(request.getFirstname())
+                .password(passwordEncoder.encode(request.getPassword()))
+
+                .firstname(request.getFirstname())
         .lastname(request.getLastname())
 
                 .direcciones(new HashSet<>()) // si no las cargás desde el form

@@ -4,20 +4,27 @@ import com.example.ecommercezapatillas.entities.Producto;
 import com.example.ecommercezapatillas.entities.enums.Color;
 import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.entities.enums.Talle;
+import com.example.ecommercezapatillas.repositories.DireccionRepository;
+import com.example.ecommercezapatillas.repositories.ProductoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProductoService {
+public class ProductoService extends BaseService<Producto,Long>{
 
     @PersistenceContext
     private EntityManager entityManager;
-
+    @Autowired
+    private ProductoRepository productoRepository;
+    public ProductoService(ProductoRepository productoRepository){
+        super(productoRepository);
+    }
     public List<Producto> filtrarProductos(
             String descripcion,
             Sexo sexo,

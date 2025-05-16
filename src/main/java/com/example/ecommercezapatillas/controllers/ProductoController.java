@@ -5,7 +5,7 @@ import com.example.ecommercezapatillas.entities.enums.Color;
 import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.entities.enums.Talle;
 import com.example.ecommercezapatillas.services.ProductoService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/productos")
-@RequiredArgsConstructor
-public class ProductoController {
+public class ProductoController extends BaseController<Producto, Long> {
 
     private final ProductoService productoService;
-
+    @Autowired
+    public ProductoController(ProductoService productoService) {
+        super(productoService);
+        this.productoService = productoService;
+    }
     @GetMapping("/filtrar")
     public ResponseEntity<List<Producto>> filtrarProductos(
             @RequestParam(required = false) String descripcion,
