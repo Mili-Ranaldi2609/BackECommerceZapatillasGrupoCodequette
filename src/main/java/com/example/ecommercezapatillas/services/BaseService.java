@@ -50,12 +50,15 @@ public class BaseService<E extends Base, ID extends Serializable> {
             throw new Exception(e.getMessage());
         }
     }
-
     public void eliminar(ID id) throws Exception {
-        try{
-            baseRepository.deleteById(id);
-        }catch(Exception e){
-            throw new Exception(e.getMessage());
+        try {
+            E entidad = baseRepository.findById(id)
+                    .orElseThrow(() -> new Exception("Entidad no encontrada con id: " + id));
+            entidad.setActive(false);
+            baseRepository.save(entidad);
+        } catch (Exception e) {
+            throw new Exception("Error al hacer borrado lógico: " + e.getMessage());
         }
     }
+
 }

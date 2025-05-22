@@ -7,5 +7,6 @@ import java.util.List;
 
 @Repository
 public interface ProductoRepository extends BaseRepository<Producto,Long> {
+    List<Producto> findByActiveTrue();
 
 }

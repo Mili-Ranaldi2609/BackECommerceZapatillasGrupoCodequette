@@ -46,7 +46,7 @@ public class authService {
 
                 .firstname(request.getFirstname())
         .lastname(request.getLastname())
-
+       .email(request.getEmail())
                 .direcciones(new HashSet<>()) // si no las cargás desde el form
                 .role(Rol.USER)
         .build();

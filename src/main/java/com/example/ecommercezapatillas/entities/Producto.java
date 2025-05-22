@@ -2,6 +2,7 @@ package com.example.ecommercezapatillas.entities;
 
 
 import com.example.ecommercezapatillas.entities.enums.Sexo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -31,8 +32,10 @@ public class Producto extends Base{
             joinColumns = @JoinColumn(name = "producto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
+    @JsonManagedReference
     private Set<Categoria> categorias = new HashSet<>();
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Detalle> detalles = new HashSet<>();
 
 

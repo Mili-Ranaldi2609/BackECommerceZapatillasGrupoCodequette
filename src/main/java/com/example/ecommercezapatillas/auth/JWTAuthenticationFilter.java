@@ -26,7 +26,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     // >>> Inyecta las dependencias necesarias <<<
     private final JwtService jwtService;               // El servicio JWT que creamos en el Paso 1
     private final UserDetailsService userDetailsService; // El bean UserDetailsService de ApplicationConfig
-
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

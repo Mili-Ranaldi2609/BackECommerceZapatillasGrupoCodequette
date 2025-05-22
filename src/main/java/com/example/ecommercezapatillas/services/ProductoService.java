@@ -1,5 +1,8 @@
 package com.example.ecommercezapatillas.services;
 
+import com.example.ecommercezapatillas.dto.DetalleDTO;
+import com.example.ecommercezapatillas.dto.ProductoDTO;
+import com.example.ecommercezapatillas.entities.Detalle;
 import com.example.ecommercezapatillas.entities.Producto;
 import com.example.ecommercezapatillas.entities.enums.Color;
 import com.example.ecommercezapatillas.entities.enums.Sexo;
@@ -25,6 +28,42 @@ public class ProductoService extends BaseService<Producto,Long>{
     public ProductoService(ProductoRepository productoRepository){
         super(productoRepository);
     }
+    private ProductoDTO convertirADTO(Producto producto) {
+        Detalle detalle = producto.getDetalles().stream().findFirst().orElse(null);
+
+        return new ProductoDTO(
+                producto.getId(),
+                producto.getDescripcion(),
+                detalle != null && detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0,
+                detalle != null && detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0,
+                producto.getCategorias().stream().map(c -> c.getDescripcion()).toList(),
+                producto.getSexo(),
+                false,
+                detalle != null && detalle.getImagenes() != null
+                        ? detalle.getImagenes().stream().map(img -> img.getDenominacion()).toList()
+                        : List.of(),
+                detalle != null
+                        ? new DetalleDTO(
+                        detalle.getColor().name(),
+                        detalle.getTalle().name(),
+                        detalle.getMarca(),
+                        detalle.getStock(),
+                        detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0
+                )
+                        : null
+        );
+    }
+    public List<ProductoDTO> filtrarProductosDTO(
+            String descripcion, Sexo sexo, String tipoProducto, List<Long> categoriaIds,
+            Color color, Talle talle, String marca, Double precioMin, Double precioMax
+    ) {
+        List<Producto> productos = filtrarProductos(
+                descripcion, sexo, tipoProducto, categoriaIds, color, talle, marca, precioMin, precioMax
+        );
+        return productos.stream().map(this::convertirADTO).toList();
+    }
+
+
     public List<Producto> filtrarProductos(
             String descripcion,
             Sexo sexo,
@@ -86,4 +125,10 @@ public class ProductoService extends BaseService<Producto,Long>{
 
         return entityManager.createQuery(cq).getResultList();
     }
+    public List<ProductoDTO> listarProductosDTO() {
+        List<Producto> productos = productoRepository.findByActiveTrue(); // si usás borrado lógico
+        return productos.stream().map(this::convertirADTO).toList();
+    }
+
+
 }

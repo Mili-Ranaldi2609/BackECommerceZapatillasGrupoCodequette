@@ -7,11 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public  class DetalleDTO {
-    private Double precioCompra;
-    private Integer stockActual;
-    private Double cantidad;
-    private Integer stockMaximo;
+public class DetalleDTO {
     private String color;
     private String talle;
+    private String marca;
+    private Integer stock;
+    private Double precio;
 }

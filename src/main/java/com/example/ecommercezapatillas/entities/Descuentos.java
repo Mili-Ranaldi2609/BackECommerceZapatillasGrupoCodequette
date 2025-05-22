@@ -1,5 +1,6 @@
 package com.example.ecommercezapatillas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,5 +31,6 @@ public class Descuentos extends Base {
             joinColumns = @JoinColumn(name = "descuento_id"),
             inverseJoinColumns = @JoinColumn(name = "precio_id")
     )
+    @JsonIgnore
     private List<Precio> precios;
 }

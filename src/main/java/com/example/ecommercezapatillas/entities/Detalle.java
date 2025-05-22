@@ -2,6 +2,9 @@ package com.example.ecommercezapatillas.entities;
 
 import com.example.ecommercezapatillas.entities.enums.Color;
 import com.example.ecommercezapatillas.entities.enums.Talle;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "detalles")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -31,11 +35,13 @@ public class Detalle extends Base {
     // 🔗 Relación con Producto (Muchos detalles para un producto)
     @ManyToOne
     @JoinColumn(name = "productoid")
+    @JsonBackReference
     private Producto producto;
 
     // 🔗 Relación con Precio (Muchos detalles pueden compartir un precio)
     @ManyToOne
     @JoinColumn(name = "precio_id")
+    @JsonIgnore
     private Precio precio;
 
     @ManyToMany
@@ -44,8 +50,20 @@ public class Detalle extends Base {
             joinColumns = @JoinColumn(name = "detalle_id"),
             inverseJoinColumns = @JoinColumn(name = "imagen_id")
     )
+    @JsonManagedReference
     private List<Imagen> imagenes;
     @OneToMany(mappedBy = "detalle")
+    @JsonIgnore
     private List<OrdenCompraDetalle> ordenes = new ArrayList<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Detalle)) return false;
+        return getId() != null && getId().equals(((Detalle) o).getId());
+    }
 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

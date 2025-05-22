@@ -1,5 +1,6 @@
 package com.example.ecommercezapatillas.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class OrdenCompra extends Base {
     @JoinColumn(name="id_usuario_direccion")
     private Direccion direccion;
     @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<OrdenCompraDetalle> detalles = new HashSet<>();
 
 

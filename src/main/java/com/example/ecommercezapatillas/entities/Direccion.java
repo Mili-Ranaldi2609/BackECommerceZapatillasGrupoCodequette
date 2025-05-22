@@ -1,6 +1,7 @@
 package com.example.ecommercezapatillas.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,6 @@ public class Direccion extends Base{
     @JoinColumn(name="localidad_id")
     private Localidad localidad;
     @ManyToMany(mappedBy = "direcciones")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }
