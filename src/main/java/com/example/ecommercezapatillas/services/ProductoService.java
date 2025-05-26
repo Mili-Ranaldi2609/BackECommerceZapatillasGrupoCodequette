@@ -2,12 +2,10 @@ package com.example.ecommercezapatillas.services;
 
 import com.example.ecommercezapatillas.dto.DetalleDTO;
 import com.example.ecommercezapatillas.dto.ProductoDTO;
-import com.example.ecommercezapatillas.entities.Detalle;
-import com.example.ecommercezapatillas.entities.Producto;
+import com.example.ecommercezapatillas.entities.*;
 import com.example.ecommercezapatillas.entities.enums.Color;
 import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.entities.enums.Talle;
-import com.example.ecommercezapatillas.repositories.DireccionRepository;
 import com.example.ecommercezapatillas.repositories.ProductoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,42 +15,80 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductoService extends BaseService<Producto,Long>{
+public class ProductoService extends BaseService<Producto, Long> {
 
     @PersistenceContext
     private EntityManager entityManager;
+
     @Autowired
     private ProductoRepository productoRepository;
-    public ProductoService(ProductoRepository productoRepository){
+
+    public ProductoService(ProductoRepository productoRepository) {
         super(productoRepository);
     }
-    private ProductoDTO convertirADTO(Producto producto) {
+
+    // Convierte Producto a ProductoDTO
+    public ProductoDTO convertirADTO(Producto producto) {
         Detalle detalle = producto.getDetalles().stream().findFirst().orElse(null);
+
+        List<String> imagenes = new ArrayList<>();
+        if (detalle != null && detalle.getImagenes() != null) {
+            imagenes = detalle.getImagenes().stream()
+                    .map(Imagen::getDenominacion)
+                    .collect(Collectors.toList());
+        }
+
+        List<String> categorias = new ArrayList<>();
+        if (producto.getCategorias() != null) {
+            categorias = producto.getCategorias().stream()
+                    .map(Categoria::getDescripcion)
+                    .collect(Collectors.toList());
+        }
+
+        DetalleDTO detalleDTO = null;
+        if (detalle != null) {
+            detalleDTO = new DetalleDTO(
+                    detalle.getColor() != null ? detalle.getColor().name() : "SIN_COLOR",
+                    detalle.getTalle() != null ? detalle.getTalle().name() : "SIN_TALLE",
+                    detalle.getMarca(),
+                    detalle.getStock(),
+                    detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0
+            );
+        }
 
         return new ProductoDTO(
                 producto.getId(),
                 producto.getDescripcion(),
+                detalle != null && detalle.getPrecio() != null ? detalle.getPrecio().getPrecioCompra() : 0.0,
                 detalle != null && detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0,
-                detalle != null && detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0,
-                producto.getCategorias().stream().map(c -> c.getDescripcion()).toList(),
+                categorias,
                 producto.getSexo(),
-                false,
-                detalle != null && detalle.getImagenes() != null
-                        ? detalle.getImagenes().stream().map(img -> img.getDenominacion()).toList()
-                        : List.of(),
-                detalle != null
-                        ? new DetalleDTO(
-                        detalle.getColor().name(),
-                        detalle.getTalle().name(),
-                        detalle.getMarca(),
-                        detalle.getStock(),
-                        detalle.getPrecio() != null ? detalle.getPrecio().getPrecioVenta() : 0.0
-                )
-                        : null
+                imagenes,
+                detalleDTO
         );
     }
+
+    // Obtener todos los productos activos
+    public List<ProductoDTO> listarProductosDTO() {
+        List<Producto> productos = productoRepository.findByActiveTrue();
+        return productos.stream().map(this::convertirADTO).toList();
+    }
+
+    // Obtener un producto por ID como DTO
+    public ProductoDTO obtenerPorIdDTO(Long id) throws Exception {
+        Optional<Producto> producto = productoRepository.findById(id);
+        if (producto.isPresent()) {
+            return convertirADTO(producto.get());
+        } else {
+            throw new Exception("Producto no encontrado con ID: " + id);
+        }
+    }
+
+    // Filtro de productos con múltiples criterios
     public List<ProductoDTO> filtrarProductosDTO(
             String descripcion, Sexo sexo, String tipoProducto, List<Long> categoriaIds,
             Color color, Talle talle, String marca, Double precioMin, Double precioMax
@@ -63,7 +99,7 @@ public class ProductoService extends BaseService<Producto,Long>{
         return productos.stream().map(this::convertirADTO).toList();
     }
 
-
+    // Lógica de filtrado con Criteria API
     public List<Producto> filtrarProductos(
             String descripcion,
             Sexo sexo,
@@ -122,13 +158,6 @@ public class ProductoService extends BaseService<Producto,Long>{
         }
 
         cq.select(producto).distinct(true).where(cb.and(predicates.toArray(new Predicate[0])));
-
         return entityManager.createQuery(cq).getResultList();
     }
-    public List<ProductoDTO> listarProductosDTO() {
-        List<Producto> productos = productoRepository.findByActiveTrue(); // si usás borrado lógico
-        return productos.stream().map(this::convertirADTO).toList();
-    }
-
-
 }

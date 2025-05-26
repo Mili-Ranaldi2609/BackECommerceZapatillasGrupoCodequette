@@ -1,17 +1,15 @@
 package com.example.ecommercezapatillas.controllers;
 
-import com.example.ecommercezapatillas.dto.DetalleDTO;
 import com.example.ecommercezapatillas.dto.ProductoDTO;
-import com.example.ecommercezapatillas.entities.*;
 import com.example.ecommercezapatillas.entities.enums.Color;
 import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.entities.enums.Talle;
+import com.example.ecommercezapatillas.entities.Producto;
 import com.example.ecommercezapatillas.services.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,6 +34,22 @@ public class ProductoController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerProductoPorId(@PathVariable Long id) {
+        try {
+            Producto producto = productoService.buscarPorId(id)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            if (producto == null) {
+                return ResponseEntity.notFound().build();
+            }
+            ProductoDTO dto = productoService.convertirADTO(producto);
+            return ResponseEntity.ok(dto);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al obtener el producto: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/filtrar")
     public ResponseEntity<?> filtrarProductos(
             @RequestParam(required = false) String descripcion,
@@ -55,7 +69,6 @@ public class ProductoController {
             return ResponseEntity.internalServerError().body("Error al filtrar productos: " + e.getMessage());
         }
     }
-
 
     @GetMapping("/test")
     public ResponseEntity<?> testProductoSimple() {

@@ -14,7 +14,6 @@ public class ProductoDTO {
     private Double precioFinal;
     private List<String> categorias;
     private Sexo sexo;
-    private boolean tienePromocion;
     private List<String> imagenes;
     private DetalleDTO detalle;
 }

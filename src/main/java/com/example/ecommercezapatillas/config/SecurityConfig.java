@@ -29,12 +29,12 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(GET,"/productos").permitAll()
+                        .requestMatchers(GET,"/productos/**").permitAll()
                         .requestMatchers(GET,"/productos/test").permitAll()
                         .requestMatchers(GET,"/categorias/**").permitAll()
                         .requestMatchers(GET,"/descuentos/**").permitAll()
                         .requestMatchers(GET,"/detalles/**").permitAll()
-                        .requestMatchers(GET,"**/menu/**").permitAll()
+                        .requestMatchers(GET,"/menu/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
