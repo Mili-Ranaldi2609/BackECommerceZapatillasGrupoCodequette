@@ -1,6 +1,5 @@
 package com.example.ecommercezapatillas.auth;
 
-
 import com.example.ecommercezapatillas.entities.User;
 import com.example.ecommercezapatillas.entities.enums.Rol;
 import com.example.ecommercezapatillas.repositories.UserRepository;
@@ -18,43 +17,45 @@ import java.util.HashSet;
 @RequiredArgsConstructor
 public class authService {
 
-    private final UserRepository userRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+        private final UserRepository userRepository;
+        private final JwtService jwtService;
+        private final PasswordEncoder passwordEncoder;
+        private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        public AuthResponse login(LoginRequest request) {
+                authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(
+                                                request.getUsername(),
+                                                request.getPassword()));
+                var user = userRepository.findByUsername(request.getUsername())
+                                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        var jwtToken = jwtService.getToken(user);
+                var jwtToken = jwtService.getToken(user);
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
-    }
-    public AuthResponse register(RegisterRequest request){
-        var user= User.builder()
-        .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
+                return AuthResponse.builder()
+                                .token(jwtToken)
+                                .username(user.getUsername())
+                                .firstname(user.getFirstname())
+                                .lastname(user.getLastname())
+                                .role(user.getRole().name())
+                                .build();
+        }
 
-                .firstname(request.getFirstname())
-        .lastname(request.getLastname())
-       .email(request.getEmail())
-                .direcciones(new HashSet<>()) // si no las cargás desde el form
-                .role(Rol.USER)
-        .build();
-        userRepository.save(user);
-        // 5. Generar el token JWT
-        var jwtToken = jwtService.getToken(user);
-        return AuthResponse.builder()
-        .token(jwtToken)
-        .build();
-    }
+        public AuthResponse register(RegisterRequest request) {
+                var user = User.builder()
+                                .username(request.getUsername())
+                                .password(passwordEncoder.encode(request.getPassword()))
+
+                                .firstname(request.getFirstname())
+                                .lastname(request.getLastname())
+                                .direcciones(new HashSet<>()) // si no las cargás desde el form
+                                .role(request.getRole() != null ? request.getRole() : Rol.USER)
+                                .build();
+                userRepository.save(user);
+                // 5. Generar el token JWT
+                var jwtToken = jwtService.getToken(user);
+                return AuthResponse.builder()
+                                .token(jwtToken)
+                                .build();
+        }
 }

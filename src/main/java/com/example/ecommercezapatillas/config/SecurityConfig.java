@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                         .requestMatchers("/auth/me").authenticated()
                         .requestMatchers(GET,"/productos/**").permitAll()
                         .requestMatchers(GET,"/productos/test").permitAll()
                         .requestMatchers(GET,"/categorias/**").permitAll()

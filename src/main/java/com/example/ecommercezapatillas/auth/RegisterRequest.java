@@ -1,5 +1,7 @@
 package com.example.ecommercezapatillas.auth;
 
+import com.example.ecommercezapatillas.entities.enums.Rol;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +16,6 @@ public class RegisterRequest {
     String password;
     String firstname;
     String lastname;
-    String email;
+    private Rol role;
+
 }

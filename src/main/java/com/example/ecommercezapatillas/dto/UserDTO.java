@@ -1,19 +1,17 @@
-package com.example.ecommercezapatillas.auth;
+package com.example.ecommercezapatillas.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-    private String token;
-    private String username;
-    private String role;
+public class UserDTO {
     private String firstname;
     private String lastname;
+    private String username; // es el email
+    private String role;
 }
 
