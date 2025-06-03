@@ -9,11 +9,10 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductoDTO {
     private Long id;
-    private String denominacion;
-    private Double precioOriginal;
-    private Double precioFinal;
+    private String descripcion;
     private List<String> categorias;
     private Sexo sexo;
+    private String tipoProducto;
     private List<String> imagenes;
-    private DetalleDTO detalle;
+    private List<DetalleDTO> detalle;
 }

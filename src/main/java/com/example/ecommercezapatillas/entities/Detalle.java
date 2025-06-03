@@ -38,27 +38,26 @@ public class Detalle extends Base {
     @JsonBackReference
     private Producto producto;
 
-    // 🔗 Relación con Precio (Muchos detalles pueden compartir un precio)
-    @ManyToOne
+    // En Detalle.java
+    @OneToOne(cascade = CascadeType.ALL) // Un Detalle tiene UN Precio
     @JoinColumn(name = "precio_id")
     @JsonIgnore
     private Precio precio;
 
     @ManyToMany
-    @JoinTable(
-            name = "detalle_imagen",
-            joinColumns = @JoinColumn(name = "detalle_id"),
-            inverseJoinColumns = @JoinColumn(name = "imagen_id")
-    )
+    @JoinTable(name = "detalle_imagen", joinColumns = @JoinColumn(name = "detalle_id"), inverseJoinColumns = @JoinColumn(name = "imagen_id"))
     @JsonManagedReference
     private List<Imagen> imagenes;
     @OneToMany(mappedBy = "detalle")
     @JsonIgnore
     private List<OrdenCompraDetalle> ordenes = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Detalle)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Detalle))
+            return false;
         return getId() != null && getId().equals(((Detalle) o).getId());
     }
 

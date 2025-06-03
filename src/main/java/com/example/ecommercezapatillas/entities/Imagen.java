@@ -6,15 +6,19 @@
     import lombok.AllArgsConstructor;
     import lombok.Builder;
     import lombok.Data;
-    import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    import java.util.List;
+import java.util.List;
 
     @Entity
     @Table(name = "imagen")
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Getter
+    @Setter
     @Builder
     public class Imagen extends Base{
 

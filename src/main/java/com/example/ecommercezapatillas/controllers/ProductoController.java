@@ -6,7 +6,11 @@ import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.entities.enums.Talle;
 import com.example.ecommercezapatillas.entities.Producto;
 import com.example.ecommercezapatillas.services.ProductoService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +26,20 @@ public class ProductoController {
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }
+    // 🟢 Crear producto
+    @PostMapping
+    public ResponseEntity<ProductoDTO> crearProducto(@RequestBody @Valid ProductoDTO dto) {
+        ProductoDTO productoCreado = productoService.crearProducto(dto);
+        return new ResponseEntity<>(productoCreado, HttpStatus.CREATED);
+    }
 
+    // 🟡 Editar producto
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoDTO> editarProducto(@PathVariable Long id,
+                                                       @RequestBody @Valid ProductoDTO dto) {
+        ProductoDTO productoActualizado = productoService.editarProducto(id, dto);
+        return ResponseEntity.ok(productoActualizado);
+    }
     @GetMapping
     public ResponseEntity<?> listar() {
         try {
