@@ -10,7 +10,7 @@ import java.util.List;
 public class ProductoDTO {
     private Long id;
     private String descripcion;
-    private List<String> categorias;
+    private List<CategoriaDTO> categorias;
     private Sexo sexo;
     private String tipoProducto;
     private List<String> imagenes;

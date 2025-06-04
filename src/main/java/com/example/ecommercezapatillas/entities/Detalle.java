@@ -44,7 +44,7 @@ public class Detalle extends Base {
     @JsonIgnore
     private Precio precio;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "detalle_imagen", joinColumns = @JoinColumn(name = "detalle_id"), inverseJoinColumns = @JoinColumn(name = "imagen_id"))
     @JsonManagedReference
     private List<Imagen> imagenes;

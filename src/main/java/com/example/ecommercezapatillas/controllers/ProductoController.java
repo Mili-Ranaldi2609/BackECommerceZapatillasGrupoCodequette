@@ -6,6 +6,7 @@ import com.example.ecommercezapatillas.entities.enums.Sexo;
 import com.example.ecommercezapatillas.entities.enums.Talle;
 import com.example.ecommercezapatillas.entities.Producto;
 import com.example.ecommercezapatillas.services.ProductoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.Valid;
 
@@ -21,10 +22,11 @@ import java.util.List;
 public class ProductoController {
 
     private final ProductoService productoService;
-
+    private final ObjectMapper objectMapper;
     @Autowired
-    public ProductoController(ProductoService productoService) {
+     public ProductoController(ProductoService productoService, ObjectMapper objectMapper) {
         this.productoService = productoService;
+        this.objectMapper = objectMapper;
     }
     // 🟢 Crear producto
     @PostMapping

@@ -1,5 +1,6 @@
 package com.example.ecommercezapatillas.services;
 
+import com.example.ecommercezapatillas.dto.CategoriaDTO;
 import com.example.ecommercezapatillas.dto.DetalleDTO;
 import com.example.ecommercezapatillas.dto.ProductoDTO;
 import com.example.ecommercezapatillas.entities.*;
@@ -40,6 +41,7 @@ public class ProductoService extends BaseService<Producto, Long> {
     public ProductoDTO convertirADTO(Producto producto) {
         Detalle detalle = producto.getDetalles().stream().findFirst().orElse(null);
 
+        List<CategoriaDTO> categoriasDTOList = new ArrayList<>();
         List<String> imagenes = new ArrayList<>();
         if (detalle != null && detalle.getImagenes() != null) {
             imagenes = detalle.getImagenes().stream()
@@ -47,12 +49,17 @@ public class ProductoService extends BaseService<Producto, Long> {
                     .collect(Collectors.toList());
         }
 
-        List<String> categorias = new ArrayList<>();
-        if (producto.getCategorias() != null) {
-            categorias = producto.getCategorias().stream()
-                    .map(Categoria::getDescripcion)
-                    .collect(Collectors.toList());
-        }
+        categoriasDTOList = producto.getCategorias().stream()
+                .map(categoria -> {
+                    return new CategoriaDTO(
+                            categoria.getId(),
+                            categoria.getDescripcion(),
+                            null, // categoriaPadre = null para evitar recursión
+                            null, // subcategorias = null para evitar recursión
+                            null // productos = null para evitar recursión
+                    );
+                })
+                .collect(Collectors.toList());
         List<DetalleDTO> detallesDTOList = new ArrayList<>();
         if (producto.getDetalles() != null) {
             detallesDTOList = producto.getDetalles().stream()
@@ -70,12 +77,11 @@ public class ProductoService extends BaseService<Producto, Long> {
         return new ProductoDTO(
                 producto.getId(),
                 producto.getDescripcion(),
-                categorias,
+                categoriasDTOList,
                 producto.getSexo(),
-                 producto.getTipoProducto(),
+                producto.getTipoProducto(),
                 imagenes,
-                detallesDTOList
-               );
+                detallesDTOList);
     }
 
     // Obtener todos los productos activos
@@ -172,13 +178,13 @@ public class ProductoService extends BaseService<Producto, Long> {
         producto.setActive(true);
         producto.setTipoProducto(dto.getTipoProducto());
         // Relacionar categorías
-        List<Categoria> categorias = dto.getCategorias().stream()
-                .map(id -> {
-                    Categoria c = new Categoria();
-                    c.setId(Long.valueOf(id));
-                    return c;
-                }).collect(Collectors.toList());
-        producto.setCategorias(new java.util.HashSet<>(categorias));
+        Set<Categoria> categorias = dto.getCategorias().stream()
+                .map(categoriaDTO -> {
+                    return categoriaRepository.findById(categoriaDTO.getId()) // <-- Accede al ID del CategoriaDTO
+                            .orElseThrow(() -> new java.util.NoSuchElementException(
+                                    "Categoría no encontrada con ID: " + categoriaDTO.getId()));
+                }).collect(Collectors.toSet()); // Usamos Set para evitar duplicados si la relación es ManyToMany
+        producto.setCategorias(categorias);
 
         // Crear detalle
         Detalle detalle = new Detalle();
@@ -193,23 +199,22 @@ public class ProductoService extends BaseService<Producto, Long> {
             Precio precio = new Precio();
             precio.setPrecioCompra(detalleDTO.getPrecioCompra()); // <-- Ahora del DetalleDTO
             precio.setPrecioVenta(detalleDTO.getPrecioVenta()); // <-- Ahora del DetalleDTO
-
-            // Si usaste @OneToOne en Detalle, no necesitas esto:
-            // precio.setDetalles(Set.of(detalle));
+             // ********* PUNTO CLAVE: Manejo de Imágenes para CADA Detalle *********
+            List<Imagen> imagenesDetalle = new ArrayList<>();
+            if (dto.getImagenes() != null && !dto.getImagenes().isEmpty()) { // Si las imágenes son a nivel de ProductoDTO y se aplican a todos los detalles
+                for (String urlImagen : dto.getImagenes()) {
+                    Imagen imagen = new Imagen();
+                    imagen.setDenominacion(urlImagen);
+                    imagen.setActive(true); // O estado por defecto
+                    // No necesitas setear detalle.setImagenes(List.of(imagen)) aquí, lo haces al final
+                    imagenesDetalle.add(imagen);
+                }
+            }
+            detalle.setImagenes(imagenesDetalle);
+  ;
             detalle.setPrecio(precio);
         }
         detalle.setProducto(producto);
-
-        // Crear imágenes
-        List<Imagen> imagenes = dto.getImagenes().stream()
-                .map(nombre -> {
-                    Imagen img = new Imagen();
-                    img.setDenominacion(nombre);
-                    img.setDetalles(List.of(detalle));
-                    return img;
-                }).collect(Collectors.toList());
-        detalle.setImagenes(imagenes);
-
         producto.setDetalles(Set.of(detalle));
 
         productoRepository.save(producto);
@@ -260,13 +265,13 @@ public class ProductoService extends BaseService<Producto, Long> {
             producto.getDetalles().add(detalle);
         }
 
-        Set<Categoria> nuevasCategorias = dto.getCategorias().stream()
-                .map(idStr -> categoriaRepository.findById(Long.valueOf(idStr))
-                        .orElseThrow(
-                                () -> new java.util.NoSuchElementException("Categoría no encontrada con ID: " + idStr)))
-                .collect(Collectors.toSet());
-        producto.setCategorias(nuevasCategorias);
-
+        Set<Categoria> categorias = dto.getCategorias().stream()
+                .map(categoriaDTO -> { 
+                    return categoriaRepository.findById(categoriaDTO.getId()) // <-- Accede al ID del CategoriaDTO
+                            .orElseThrow(() -> new java.util.NoSuchElementException(
+                                    "Categoría no encontrada con ID: " + categoriaDTO.getId()));
+                }).collect(Collectors.toSet()); // Usamos Set para evitar duplicados si la relación es ManyToMany
+        producto.setCategorias(categorias);
         productoRepository.save(producto);
         return convertirADTO(producto);
     }
