@@ -29,25 +29,18 @@ public class Detalle extends Base {
     private String marca;
 
     private Integer stock;
-
-    private Boolean estado;
-
-    // 🔗 Relación con Producto (Muchos detalles para un producto)
-    @ManyToOne
-    @JoinColumn(name = "productoid")
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productoid") 
     private Producto producto;
-
-    // En Detalle.java
-    @OneToOne(cascade = CascadeType.ALL) // Un Detalle tiene UN Precio
+   
+    @OneToOne(cascade = CascadeType.ALL) 
     @JoinColumn(name = "precio_id")
     @JsonIgnore
     private Precio precio;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "detalle_imagen", joinColumns = @JoinColumn(name = "detalle_id"), inverseJoinColumns = @JoinColumn(name = "imagen_id"))
-    @JsonManagedReference
-    private List<Imagen> imagenes;
+    @OneToMany(mappedBy = "detalle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Imagen> imagenes = new ArrayList<>(); 
+
     @OneToMany(mappedBy = "detalle")
     @JsonIgnore
     private List<OrdenCompraDetalle> ordenes = new ArrayList<>();

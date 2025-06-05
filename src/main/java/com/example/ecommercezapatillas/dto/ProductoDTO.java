@@ -13,6 +13,6 @@ public class ProductoDTO {
     private List<CategoriaDTO> categorias;
     private Sexo sexo;
     private String tipoProducto;
-    private List<String> imagenes;
     private List<DetalleDTO> detalle;
+    private boolean active;
 }

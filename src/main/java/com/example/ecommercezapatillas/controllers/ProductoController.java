@@ -42,10 +42,21 @@ public class ProductoController {
         ProductoDTO productoActualizado = productoService.editarProducto(id, dto);
         return ResponseEntity.ok(productoActualizado);
     }
-    @GetMapping
+    @GetMapping("/activos")
+    public ResponseEntity<?> listarActivos() {
+        try {
+            List<ProductoDTO> productosDTO = productoService.listarProductosActivosDTO();
+            return ResponseEntity.ok(productosDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al obtener los productos: " + e.getMessage());
+        }
+    }
+     @GetMapping 
     public ResponseEntity<?> listar() {
         try {
-            List<ProductoDTO> productosDTO = productoService.listarProductosDTO();
+          
+            List<ProductoDTO> productosDTO = productoService.listarTodosLosProductosDTO();
             return ResponseEntity.ok(productosDTO);
         } catch (Exception e) {
             e.printStackTrace();

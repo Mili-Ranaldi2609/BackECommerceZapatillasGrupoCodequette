@@ -34,9 +34,24 @@ public class Producto extends Base{
     )
     @JsonManagedReference
     private Set<Categoria> categorias = new HashSet<>();
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<Detalle> detalles = new HashSet<>();
+     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Detalle> detalles = new HashSet<>(); 
+    
+    public void addDetalle(Detalle detalle) {
+        if (this.detalles == null) {
+            this.detalles = new HashSet<>();
+        }
+        this.detalles.add(detalle);
+        detalle.setProducto(this); // Establece la relación inversa
+    }
+
+    public void removeDetalle(Detalle detalle) {
+        if (this.detalles != null) {
+            this.detalles.remove(detalle);
+            detalle.setProducto(null); // Rompe la relación inversa
+        }
+    }
+
 
 
 }

@@ -1,5 +1,7 @@
 package com.example.ecommercezapatillas.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,4 +15,6 @@ public class DetalleDTO {
     private Integer stock;
     private Double precioCompra;
     private Double precioVenta;
+    private boolean active;
+    private List<String> imagenes;
 }
