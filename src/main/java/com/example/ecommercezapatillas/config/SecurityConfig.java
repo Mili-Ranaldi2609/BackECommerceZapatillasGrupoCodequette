@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                          .requestMatchers("/auth/me").authenticated()
+                         .requestMatchers(GET,"/productos/filtrar**").permitAll()
                         .requestMatchers(GET,"/productos/activos/**").permitAll()
                         .requestMatchers(GET,"/productos/test").permitAll()
                         .requestMatchers(GET,"/categorias/**").permitAll()
