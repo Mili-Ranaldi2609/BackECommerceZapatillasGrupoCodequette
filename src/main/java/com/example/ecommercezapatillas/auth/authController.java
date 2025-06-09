@@ -27,10 +27,12 @@ public class authController {
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal User user) {
         UserDTO dto = new UserDTO(
+                user.getId(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getUsername(),
-                user.getRole().name());
+                user.getRole().name(),
+                user.isActive());
         return ResponseEntity.ok(dto);
     }
 

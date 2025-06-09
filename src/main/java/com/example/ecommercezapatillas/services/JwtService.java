@@ -18,32 +18,22 @@ import java.util.function.Function;
 @Service // Indica que es un componente de servicio gestionado por Spring
 public class JwtService {
 
-    // Inyecta la clave secreta desde tu archivo application.properties/yml
-    // Asegúrate de tener la propiedad 'application.security.jwt.secret-key' configurada
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
-    // Inyecta el tiempo de expiración del token desde application.properties/yml
-    // Asegúrate de tener la propiedad 'application.security.jwt.expiration' configurada (en milisegundos)
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
-
-    // >>> Métodos para extraer información del token <<<
-
-    // Extrae el 'subject' (nombre de usuario) del token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Extrae un claim específico del token
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
     // Extrae todos los claims (cuerpo) del token
     private Claims extractAllClaims(String token) {
-        // Usa el parser de Jwts, configura la clave de firma y parsea el token
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey()) // Configura la clave para verificar la firma
