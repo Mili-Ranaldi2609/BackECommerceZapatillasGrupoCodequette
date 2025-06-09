@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,6 +30,24 @@ public class ProductoController {
      public ProductoController(ProductoService productoService, ObjectMapper objectMapper) {
         this.productoService = productoService;
         this.objectMapper = objectMapper;
+    }
+     @PostMapping("/upload-image")
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("El archivo no puede estar vacío.");
+        }
+        try {
+            // Llama al método de tu ProductoService que ya sube el archivo a Cloudinary
+            String imageUrl = productoService.uploadImage(file);
+            // Retorna la URL de la imagen subida al frontend
+            return ResponseEntity.ok(Collections.singletonMap("url", imageUrl));
+        } catch (IOException e) {
+            // Manejo de errores de IO (ej. archivo no se puede leer)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error de I/O al subir la imagen: " + e.getMessage());
+        } catch (Exception e) {
+            // Captura cualquier otra excepción inesperada
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado al subir la imagen: " + e.getMessage());
+        }
     }
     // 🟢 Crear producto
     @PostMapping
