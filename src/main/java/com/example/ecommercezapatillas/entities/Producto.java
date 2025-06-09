@@ -32,8 +32,10 @@ public class Producto extends Base{
             joinColumns = @JoinColumn(name = "producto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
+    @Builder.Default
     @JsonManagedReference
     private Set<Categoria> categorias = new HashSet<>();
+    @Builder.Default
      @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Detalle> detalles = new HashSet<>(); 
     

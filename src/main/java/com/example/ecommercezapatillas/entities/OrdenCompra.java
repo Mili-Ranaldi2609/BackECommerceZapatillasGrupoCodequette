@@ -20,9 +20,11 @@ public class OrdenCompra extends Base {
     private Float total;
     @Column(name = "fecha_compra")
     private LocalDateTime fechaCompra;
+    
     @ManyToOne
     @JoinColumn(name="id_usuario_direccion")
     private Direccion direccion;
+    @Builder.Default
     @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<OrdenCompraDetalle> detalles = new HashSet<>();

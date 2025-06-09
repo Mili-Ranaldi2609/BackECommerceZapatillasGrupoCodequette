@@ -22,5 +22,6 @@ public class Imagen extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "detalle_id") 
     private Detalle detalle;
+    
 
 }

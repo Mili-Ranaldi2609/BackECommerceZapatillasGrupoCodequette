@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true) 
 public class Direccion extends Base{
     @Column(name="calle")
     private String calle;
@@ -27,6 +29,7 @@ public class Direccion extends Base{
     @ManyToOne
     @JoinColumn(name="localidad_id")
     private Localidad localidad;
+    @Builder.Default 
     @ManyToMany(mappedBy = "direcciones")
     @JsonIgnore
     private Set<User> users = new HashSet<>();

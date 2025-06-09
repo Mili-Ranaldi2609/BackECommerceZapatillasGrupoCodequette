@@ -37,10 +37,10 @@ public class Detalle extends Base {
     @JoinColumn(name = "precio_id")
     @JsonIgnore
     private Precio precio;
-
+    @Builder.Default
     @OneToMany(mappedBy = "detalle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagen> imagenes = new ArrayList<>(); 
-
+    @Builder.Default 
     @OneToMany(mappedBy = "detalle")
     @JsonIgnore
     private List<OrdenCompraDetalle> ordenes = new ArrayList<>();

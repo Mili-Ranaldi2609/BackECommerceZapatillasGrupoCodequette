@@ -15,5 +15,6 @@ public class UserDTO {
     private String username; // es el email
     private String role;
     private boolean active;
+     private String profileImage;
 }
 

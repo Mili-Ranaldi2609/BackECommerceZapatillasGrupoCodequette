@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true) 
 public class OrdenCompraDetalle extends Base {
 
     @Column(nullable = false)

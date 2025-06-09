@@ -25,11 +25,12 @@ public class Categoria extends Base{
     @JoinColumn(name = "categoria_padre_id")
     @JsonIgnore
     private Categoria categoriaPadre;
-
+    
+    @Builder.Default
     @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Categoria> subcategorias = new HashSet<>();
-
+    @Builder.Default
     @ManyToMany(mappedBy = "categorias")
     @JsonBackReference
     private Set<Producto> productos = new HashSet<>();

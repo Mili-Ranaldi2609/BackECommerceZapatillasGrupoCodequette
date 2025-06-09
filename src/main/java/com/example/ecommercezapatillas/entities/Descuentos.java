@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true) 
 public class Descuentos extends Base {
 
     @Column(name = "porcentaje", nullable = false)

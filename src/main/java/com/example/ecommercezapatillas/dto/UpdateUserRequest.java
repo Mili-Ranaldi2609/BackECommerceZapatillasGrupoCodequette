@@ -16,5 +16,7 @@ public class UpdateUserRequest {
     private String lastname;
     private String username;
     private String password;
-    private Rol role;       
+    private Rol role;
+    private boolean active;
+    private String profileImage;
 }

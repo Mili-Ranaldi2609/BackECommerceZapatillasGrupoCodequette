@@ -22,6 +22,7 @@ public class Precio extends Base {
 
     @Column(name = "precio_venta", nullable = false)
     private double precioVenta;
+    @Builder.Default
     @OneToMany(mappedBy = "precio", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Detalle> detalles = new HashSet<>();
