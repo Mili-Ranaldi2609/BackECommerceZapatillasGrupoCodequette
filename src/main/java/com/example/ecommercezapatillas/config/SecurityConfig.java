@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                          .requestMatchers("/auth/me").authenticated()
+                         
+                         .requestMatchers("/auth/direcciones/**").authenticated()
                          .requestMatchers(GET,"productos/**").permitAll()
                          .requestMatchers(GET,"/productos/filtrar**").permitAll()
                         .requestMatchers(GET,"/productos/activos/**").permitAll()
@@ -38,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers(GET,"/descuentos/**").permitAll()
                         .requestMatchers(GET,"/detalles/**").permitAll()
                         .requestMatchers(GET,"/menu/**").permitAll()
+                        
+                        .requestMatchers(GET,"/ubicaciones/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

@@ -44,6 +44,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
      implementation 'com.cloudinary:cloudinary-http44:1.38.0'
+    implementation 'com.mercadopago:sdk-java:2.4.0'
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-envers
     implementation("org.hibernate.orm:hibernate-envers:6.6.13.Final")
 }

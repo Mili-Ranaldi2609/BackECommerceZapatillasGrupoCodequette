@@ -1,16 +1,12 @@
 package com.example.ecommercezapatillas.entities;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name="direcciones")
@@ -23,14 +19,15 @@ public class Direccion extends Base{
     @Column(name="calle")
     private String calle;
     @Column(name="numero")
-    private int numero;
+    private Number numero;
     @Column(name="cp")
-    private int cp;
+    private String cp;
     @ManyToOne
     @JoinColumn(name="localidad_id")
     private Localidad localidad;
-    @Builder.Default 
-    @ManyToMany(mappedBy = "direcciones")
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "user_id") 
     @JsonIgnore
-    private Set<User> users = new HashSet<>();
+    private User user;
+
 }

@@ -20,14 +20,21 @@ public class OrdenCompra extends Base {
     private Float total;
     @Column(name = "fecha_compra")
     private LocalDateTime fechaCompra;
-    
+    @Column(name = "estado_pago")
+    private String estadoPago;
+    @Column(name = "mp_external_reference", unique = true)
+    private String mpExternalReference;
+    @Column(name = "mp_payment_id")
+    private Long mpPaymentId;
     @ManyToOne
-    @JoinColumn(name="id_usuario_direccion")
+    @JoinColumn(name = "id_usuario_direccion")
     private Direccion direccion;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario_comprador")
+    private User usuarioComprador;
     @Builder.Default
     @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<OrdenCompraDetalle> detalles = new HashSet<>();
-
 
 }

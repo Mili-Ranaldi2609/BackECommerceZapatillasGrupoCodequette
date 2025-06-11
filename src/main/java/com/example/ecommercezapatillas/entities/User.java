@@ -42,11 +42,11 @@ public class User extends Base implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Rol role;
-    @Builder.Default 
-    @ManyToMany
-    @JoinTable(name = "usuario_direccion", joinColumns = @JoinColumn(name = "usuarioId"), inverseJoinColumns = @JoinColumn(name = "direccionId"))
-    @JsonIgnore
-    private Set<Direccion> direcciones = new HashSet<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore 
+    private Set<Direccion> direcciones = new HashSet<>(); 
+
     @Column(name = "profile_image_url")
     private String profileImage;
     @Column(name = "profile_image_public_id")
@@ -75,6 +75,21 @@ public class User extends Base implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+     
+    public void addDireccion(Direccion direccion) {
+        if (this.direcciones == null) {
+            this.direcciones = new HashSet<>();
+        }
+        this.direcciones.add(direccion);
+        direccion.setUser(this); 
+    }
+
+    public void removeDireccion(Direccion direccion) {
+        if (this.direcciones != null) {
+            this.direcciones.remove(direccion);
+            direccion.setUser(null); 
+        }
     }
 
 }
